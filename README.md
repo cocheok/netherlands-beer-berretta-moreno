@@ -1,7 +1,10 @@
-# Getting Started with Create React App
+# Netherlands Beer
+## Student
+José Manuel Berretta Moreno
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
+Ecommerce to sell beers from the Netherlands
 ## Available Scripts
 
 In the project directory, you can run:
