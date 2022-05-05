@@ -74,3 +74,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ### Fragment 
 <></> Contenedor fantasma
+
+
+## Material UI
+https://mui.com/material-ui/getting-started/usage/
+
+## FlexBox
+https://css-tricks.com/snippets/css/a-guide-to-flexbox/
