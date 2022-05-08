@@ -16,12 +16,13 @@ function App() {
       title: 'Contact'
     }
   ]
+  
   return (
     <div className="app">
       <Header sections={sections} />
       <div className="body">
         <section className="product">
-          <ItemListContainer greeting='Hello Beer List'/>
+          <ItemListContainer/>
         </section>
       </div>
       
