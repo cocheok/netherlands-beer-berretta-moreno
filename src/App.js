@@ -1,4 +1,4 @@
-import React, { Component }  from 'react';
+import React from 'react';
 import Header from './components/NavBar/NavBar';
 import ItemListContainer from './components/ItemListContainer/ItemListContainer';
 function App() {

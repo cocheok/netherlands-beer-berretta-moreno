@@ -1,3 +1,5 @@
+@import "~react-image-gallery/styles/scss/image-gallery.scss"
+
 .app
   display: flex
   flex-direction: column
@@ -22,14 +24,26 @@
     align-content: center
     justify-content: space-around
     background-color: #708899
-    .item-list
+    .item-list-container
       display: flex
       flex-direction: row
       flex-wrap: wrap
       justify-content: space-around
       align-content: center
       gap: 2vh
-      
+  
+.item-description
+  display: flex
+  flex-direction: row
+  justify-content: center
+  align-content: center
+  .images
+    display: flex
+    width: 50%
+  .details
+    display: flex
+    width: 50%
+    flex-direction: column
 
 
 

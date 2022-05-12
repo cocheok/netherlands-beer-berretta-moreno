@@ -5,11 +5,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 function ItemListContainer() {
   
   const [items, setItems] = useState([]);
+  
   React.useEffect(() => {
-
+    // https://api.mercadolibre.com/items/MLA1106568272
+    //MLA920764471
+    // MLA920764489
     const itemsMock = [
       {
-        id: 1,
+        id: 'MLA1106568272',
         title: 'Heineken',
         description: 'Heineken beer 300ml',
         pictureUrl: 'images/products/heineken.jpeg',
@@ -17,15 +20,15 @@ function ItemListContainer() {
         price: 1.45
       },
       {
-        id: 2,
-        title: 'Brand',
-        description: 'Brand beer 300ml',
+        id: 'MLA920764471',
+        title: 'Grolsch',
+        description: 'Grolsch beer 300ml',
         pictureUrl: 'images/products/brand.png',
         stock: 7,
         price: 1.25
       },
       {
-        id: 3,
+        id: 'MLA920764489',
         title: 'Amstel',
         description: 'Amstel beer 12u pack',
         pictureUrl: 'images/products/amstel-pack.jpg',
@@ -37,9 +40,17 @@ function ItemListContainer() {
     new Promise(resolve => 
       setTimeout(() => resolve(setItems(itemsMock)), 2000) )
   }, []); 
+ 
+
+  /*
+  React.useEffect(() => {
+    fetch('http://localhost:6060/beers')
+      .then(results => results.json())
+      .then(data => { setItems(data) } );
+  }, []);
+*/
   
-  
-  
+  /*
   
   const onAdd = (itemId, count) => {
     let newItemsState = [...items]
@@ -49,13 +60,10 @@ function ItemListContainer() {
     }
     return setItems(newItemsState)
   }
-  let resToRender = <CircularProgress size={90} color={"primary"}/>
-  if(items.length > 0){
-    resToRender = <ItemList items={items} onAdd={onAdd} />
-  } 
+ */
   return (
-    <div className="item-list">
-      {resToRender}
+    <div className="item-list-container">
+      { (items.length > 0) ? <ItemList items={items} /> : <CircularProgress size={90} color={"primary"}/> }
     </div>
   )
 }
