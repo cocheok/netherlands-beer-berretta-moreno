@@ -1,69 +1,64 @@
 import React, { useState } from 'react'
 import ItemList from '../ItemList/ItemList';
 import CircularProgress from '@mui/material/CircularProgress';
+import { products } from '../../data/products';
+import Button from '@mui/material/Button';
 
-function ItemListContainer() {
+function ItemListContainer({categoryId, errorHandler}) {
   
   const [items, setItems] = useState([]);
+  const [loaded, setLoaded] = useState(false);
   
   React.useEffect(() => {
-    // https://api.mercadolibre.com/items/MLA1106568272
-    //MLA920764471
-    // MLA920764489
-    const itemsMock = [
-      {
-        id: 'MLA1106568272',
-        title: 'Heineken',
-        description: 'Heineken beer 300ml',
-        pictureUrl: 'images/products/heineken.jpeg',
-        stock: 10,
-        price: 1.45
-      },
-      {
-        id: 'MLA920764471',
-        title: 'Grolsch',
-        description: 'Grolsch beer 300ml',
-        pictureUrl: 'images/products/brand.png',
-        stock: 7,
-        price: 1.25
-      },
-      {
-        id: 'MLA920764489',
-        title: 'Amstel',
-        description: 'Amstel beer 12u pack',
-        pictureUrl: 'images/products/amstel-pack.jpg',
-        stock: 15,
-        price: 1.75
-      }
-    ];
+    
 
-    new Promise(resolve => 
-      setTimeout(() => resolve(setItems(itemsMock)), 2000) )
-  }, []); 
- 
+    new Promise((resolve, reject) => 
+      setTimeout(() => { 
+        
+        if(categoryId){
+          const filteredProducts = products.filter(item => item.category_id === +categoryId);
+          setItems(filteredProducts);
+          if(!filteredProducts.length){
+            //Route to /category/
+            reject(`There are no products in the category ${categoryId}`)
+          }
+        }
+        else{
+          //display all products
+          setItems(products);
+        }
+        setLoaded(true);
+        resolve(products)
+         
+      }, 2000) ).catch( err => {
+        const errorMessage = typeof err === 'string' ? err : 'There was an issue processing your request'; 
+        // Go to the main page and display error message
+        errorHandler(errorMessage);
+        setItems([]);
+        setLoaded(true);
+        //navigate(`/home?error=${errorMessage}`, { replace: true });
+      });
+  }, [categoryId, errorHandler, items.length]); 
 
-  /*
-  React.useEffect(() => {
-    fetch('http://localhost:6060/beers')
-      .then(results => results.json())
-      .then(data => { setItems(data) } );
-  }, []);
-*/
-  
-  /*
-  
-  const onAdd = (itemId, count) => {
-    let newItemsState = [...items]
-    const editedIndex = newItemsState.findIndex( item => item.id === itemId)
-    if(newItemsState[editedIndex].stock >= count){
-      newItemsState[editedIndex].stock -= count
+  let itemsSection; 
+  if(loaded) {
+    if(items.length > 0){
+      itemsSection = <ItemList items={items} />
+    } else {
+      itemsSection = <div className="no-items">
+      <h1>There are no items to display</h1>
+      <Button variant="text" href="/">Go Home</Button>
+      </div>
     }
-    return setItems(newItemsState)
+  } else { 
+    itemsSection = <CircularProgress size={90} color={"primary"}/>
+      
   }
- */
+
+
   return (
     <div className="item-list-container">
-      { (items.length > 0) ? <ItemList items={items} /> : <CircularProgress size={90} color={"primary"}/> }
+      { itemsSection }    
     </div>
   )
 }

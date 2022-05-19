@@ -10,7 +10,8 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
-
+import {Link} from 'react-router-dom';
+import { Divider } from '@mui/material';
 
 export default function Header({sections}) {
   const [state, setState] = React.useState({
@@ -36,9 +37,21 @@ export default function Header({sections}) {
     >
       <List>
         {sections.map((section, index) => (
-          <ListItem button key={index}>
-            <ListItemText primary={section.title} />
-          </ListItem>
+          <div key={index} >
+            <ListItem button  component={Link} to={`${section.ref}`}>
+              <ListItemText primary={section.title} />
+            </ListItem>
+            <List>
+            {section.subsections?.map((subsection, subIndex) => 
+                
+                  <ListItem key={`sub-${subIndex}`} component={Link} button to={`${section.ref}/${subsection.id}`}>
+                    <ListItemText secondary={subsection.title} />
+                  </ListItem>
+              )}
+            </List>
+            <Divider />
+          </div>
+          
         ))}
       </List>
 
@@ -67,7 +80,7 @@ export default function Header({sections}) {
             {list('left')}
           </Drawer>
             <div className="logo">
-              <img src="images/logo.png" alt='Netherlands Beer'/>     
+              <img src="/images/logo.png" alt='Netherlands Beer'/>     
             </div>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Netherlands Beer

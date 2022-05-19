@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import ItemDetail from '../ItemDetail/ItemDetail';
-import axios from 'axios';
-import CircularProgress from '@mui/material/CircularProgress';
 
-function ItemDetailContainer({itemId}) {
+import CircularProgress from '@mui/material/CircularProgress';
+import { productDetails } from '../../data/products';
+import Button from '@mui/material/Button';
+
+function ItemDetailContainer({itemId, errorHandler}) {
   
   const [item, setItem] = useState(undefined);
+  const [loaded, setLoaded] = useState(false);
 
   const onAdd = (count) => {
     let newItemsState = {...item} 
@@ -16,17 +19,53 @@ function ItemDetailContainer({itemId}) {
   }
   
   React.useEffect(() => {
-    axios.get(`https://api.mercadolibre.com/items/${itemId}`).then(itemDetail => { 
-      setItem(itemDetail.data)
-      console.log(itemDetail.data) 
-  
-  }).catch( err => alert('Error'))
-  }, [itemId]);
+    new Promise((resolve, reject) => 
+    setTimeout(() => { 
+      
+      if(itemId){
+        const filteredProducts = productDetails.filter(item => item.id === +itemId);
+        
+        if(!filteredProducts.length){
+          reject(`There are no products with id ${itemId}`)
+        } else {
+          setItem(filteredProducts[0]);
+        }
+      }
+      else{
+        reject(`There is no product selected to display`);
+        // display all products
+        // setItems(products);
+      }
+      setLoaded(true);
+      resolve(productDetails)
+       
+    }, 2000) ).catch( err => {
+      const errorMessage = typeof err === 'string' ? err : 'There was an issue processing your request'; 
+      // Go to the main page and display error message
+      errorHandler(errorMessage);
+      setLoaded(true);
+      //navigate(`/home?error=${errorMessage}`, { replace: true });
+    });
+  }, [errorHandler, itemId]);
 
+  let itemDetail; 
+  if(loaded) {
+    if(item){
+      itemDetail = <ItemDetail item={item} onAdd={onAdd} />
+    } else {
+      itemDetail = <div className="no-items">
+      <h1>There is no item to display</h1>
+      <Button variant="text" href="/">Go Home</Button>
+      </div>
+    }
+  } else { 
+    itemDetail = <CircularProgress size={90} color={"primary"}/>
+      
+  }
  
   return (
     <div className="item-detail-container">
-    { item ? <ItemDetail item={item} onAdd={onAdd} /> : <CircularProgress size={90} color={"primary"}/> }
+    { itemDetail}
   </div>
       
   )

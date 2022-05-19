@@ -1,33 +1,56 @@
 import React from 'react';
 import Header from './components/NavBar/NavBar';
-import ItemListContainer from './components/ItemListContainer/ItemListContainer';
+import Home from './views/Home/Home';
+
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+import Category from './views/Category/Category';
+import Item from './views/Item/Item';
+
 function App() {
   const sections = [
     {
-      title: 'Home'
+      title: 'Home',
+      ref: '/'
     },
     {
-      title: 'Products'
-    },
-    {
-      title: 'About us'
-    },
-    {
-      title: 'Contact'
+      title: 'Beer types',
+      ref: '/category',
+      subsections: [ 
+        {
+          id: 1,
+          title: 'Golden'
+        },
+        {
+          id: 2,
+          title: 'IPA'
+        },
+        {
+          id: 3,
+          title: 'Amber'
+        }
+      ]
     }
   ]
-  
+
   return (
-    <div className="app">
-      <Header sections={sections} />
-      <div className="body">
-        <section className="product">
-          <ItemListContainer/>
-        </section>
-      </div>
+    <div className="app">  
       
-      
-    </div>
+        <BrowserRouter>
+        <Header sections={sections} />
+        <div className="body">
+            <Routes>
+              <Route exact path="/item/:id" element={<Item />} />
+              <Route exact path="/category/:categoryId" element={<Category />} />
+              <Route exact path="*" element={<Home />} />
+            </Routes>
+          </div>
+    
+        </BrowserRouter>
+        </div>  
   );
 }
 

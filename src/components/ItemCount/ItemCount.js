@@ -20,9 +20,9 @@ export const ItemCount = ({itemId, stock, initial, onAdd}) => {
     }
   }
   const addChartHandler = () => {
-    const countAux = count
+    const countAux = count;
     setCount(0)
-    return onAdd(itemId, countAux)
+    return onAdd(countAux)
      
   }
   return (

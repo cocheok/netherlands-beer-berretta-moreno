@@ -13,25 +13,29 @@
       img
         width: 100%
   
-.body
+
+.home
+  min-height: 100vh
   display: flex
   flex-direction: column
-  flex-wrap: nowrap
-  section
-    min-height: 100vh
-  .product
+  align-content: center
+  background-color: #708899
+  gap: 2vh
+
+.item-list-container
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  justify-content: space-around
+  align-content: center
+  gap: 2vh
+  .no-items 
     display: flex
-    align-content: center
+    flex-direction: column
+    flex-wrap: wrap
     justify-content: space-around
-    background-color: #708899
-    .item-list-container
-      display: flex
-      flex-direction: row
-      flex-wrap: wrap
-      justify-content: space-around
-      align-content: center
-      gap: 2vh
-  
+    align-content: center
+
 .item-description
   display: flex
   flex-direction: row
