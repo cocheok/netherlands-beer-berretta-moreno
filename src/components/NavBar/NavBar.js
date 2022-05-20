@@ -38,13 +38,13 @@ export default function Header({sections}) {
       <List>
         {sections.map((section, index) => (
           <div key={index} >
-            <ListItem button  component={Link} to={`${section.ref}`}>
+            <ListItem button component={Link} to={`${section.ref}`}>
               <ListItemText primary={section.title} />
             </ListItem>
             <List>
             {section.subsections?.map((subsection, subIndex) => 
                 
-                  <ListItem key={`sub-${subIndex}`} component={Link} button to={`${section.ref}/${subsection.id}`}>
+                  <ListItem key={`sub-${subIndex}`} button component={Link} to={`${section.ref}/${subsection.id}`}>
                     <ListItemText secondary={subsection.title} />
                   </ListItem>
               )}

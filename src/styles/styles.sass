@@ -13,20 +13,28 @@
       img
         width: 100%
   
+.category
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-content: center
+  background-color: #708899
+  gap: 2vh
 
 .home
   min-height: 100vh
   display: flex
   flex-direction: column
+  justify-content: center
   align-content: center
   background-color: #708899
-  gap: 2vh
 
 .item-list-container
   display: flex
   flex-direction: row
   flex-wrap: wrap
-  justify-content: space-around
+  justify-content: center
   align-content: center
   gap: 2vh
   .no-items 
@@ -35,6 +43,7 @@
     flex-wrap: wrap
     justify-content: space-around
     align-content: center
+
 
 .item-description
   display: flex
@@ -48,7 +57,22 @@
     display: flex
     width: 50%
     flex-direction: column
+  .actions
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-content: center
+
+.item-count
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-content: center
 
 
-
-  
+.item-detail-container
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  justify-content: center
+  align-content: center

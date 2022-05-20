@@ -5,10 +5,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { productDetails } from '../../data/products';
 import Button from '@mui/material/Button';
 
-function ItemDetailContainer({itemId, errorHandler}) {
+function ItemDetailContainer({itemId}) {
   
   const [item, setItem] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState();
 
   const onAdd = (count) => {
     let newItemsState = {...item} 
@@ -42,11 +43,11 @@ function ItemDetailContainer({itemId, errorHandler}) {
     }, 2000) ).catch( err => {
       const errorMessage = typeof err === 'string' ? err : 'There was an issue processing your request'; 
       // Go to the main page and display error message
-      errorHandler(errorMessage);
       setLoaded(true);
+      setError(errorMessage)
       //navigate(`/home?error=${errorMessage}`, { replace: true });
     });
-  }, [errorHandler, itemId]);
+  }, [itemId]);
 
   let itemDetail; 
   if(loaded) {
@@ -55,7 +56,8 @@ function ItemDetailContainer({itemId, errorHandler}) {
     } else {
       itemDetail = <div className="no-items">
       <h1>There is no item to display</h1>
-      <Button variant="text" href="/">Go Home</Button>
+      <h2>{`Error: ${error}`}</h2>
+      <Button variant="contained" href="/">Go Home</Button>
       </div>
     }
   } else { 

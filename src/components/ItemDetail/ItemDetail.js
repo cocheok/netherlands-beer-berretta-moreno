@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState }  from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
@@ -10,8 +10,18 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
 import { ItemCount } from '../ItemCount/ItemCount'
+import Button from '@mui/material/Button'
 
 function ItemDetail({item, onAdd}) {
+  const [endOrder, setEndOrder] = useState(false);
+  const [selectedQty, setSelectedQty] = useState();
+
+
+  const handleOnAdd = (count) => {
+    setSelectedQty(count);
+    onAdd(count);
+    setEndOrder(true);
+  }
 
   return (
     <div className="item-description">
@@ -43,8 +53,22 @@ function ItemDetail({item, onAdd}) {
          </Typography>
 
        </CardContent>
-       <CardActions>
-         <ItemCount itemId={item.id} stock={item.stock} initial={0} onAdd={onAdd} />
+       <CardActions className='actions'>
+       { endOrder?
+        (
+          <>
+          <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
+          {`Quantity: ${selectedQty} units`} 
+         </Typography>
+          
+          <Button size="large" color='success'  href="/cart" >End Order</Button>
+          </>
+          
+        ):
+        (
+         <ItemCount itemId={item.id} stock={item.stock} initial={0} onAdd={handleOnAdd} />
+        )
+        }
        </CardActions>
 
        </Card>

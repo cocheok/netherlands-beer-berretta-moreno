@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from './components/NavBar/NavBar';
 import Home from './views/Home/Home';
-
+import Cart from './views/Cart/Cart';
 import {
   BrowserRouter,
   Routes,
@@ -45,6 +45,7 @@ function App() {
             <Routes>
               <Route exact path="/item/:id" element={<Item />} />
               <Route exact path="/category/:categoryId" element={<Category />} />
+              <Route exact path="/cart" element={<Cart />} />
               <Route exact path="*" element={<Home />} />
             </Routes>
           </div>
