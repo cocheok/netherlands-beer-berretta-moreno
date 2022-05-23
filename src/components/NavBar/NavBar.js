@@ -85,8 +85,9 @@ export default function Header({sections}) {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Netherlands Beer
             </Typography>
-           
-            <CartWidget /> 
+            <IconButton color="primary" aria-label="Open Cart" href="/cart">
+              <CartWidget /> 
+            </IconButton>
           </Toolbar>
       </AppBar>
         

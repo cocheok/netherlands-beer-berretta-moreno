@@ -1,4 +1,4 @@
-import React, { useState }  from 'react'
+import React, { useState, useEffect }  from 'react'
 import Box from '@mui/material/Box'
 import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
@@ -24,6 +24,9 @@ export const ItemCount = ({ stock, initial, onAdd}) => {
     setCount(0)
     onAdd(countAux)
   }
+  useEffect (() => {
+    setCount(initial);
+  },  [initial])
 
   return (
     <div className='item-count'>

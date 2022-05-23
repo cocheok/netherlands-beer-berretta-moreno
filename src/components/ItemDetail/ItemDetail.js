@@ -1,4 +1,4 @@
-import React, { useState }  from 'react'
+import React, { useEffect, useState }  from 'react'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
@@ -11,17 +11,35 @@ import Avatar from '@mui/material/Avatar';
 import { red } from '@mui/material/colors';
 import { ItemCount } from '../ItemCount/ItemCount'
 import Button from '@mui/material/Button'
+import { CartContext } from "../../context/CartContext/CartContext";
+import { useNavigate } from "react-router-dom";
 
 function ItemDetail({item, onAdd}) {
+  const { addItem, cart } = React.useContext(CartContext);
+
   const [endOrder, setEndOrder] = useState(false);
   const [selectedQty, setSelectedQty] = useState();
+  const [initValue, setInitialValue] = useState(0);
+  const navigate = useNavigate();
 
-
+ 
   const handleOnAdd = (count) => {
     setSelectedQty(count);
     onAdd(count);
     setEndOrder(true);
   }
+
+  const handleEndOrder = () => {
+    addItem(item, selectedQty);
+    navigate("/cart", { replace: true });
+  }
+
+  useEffect (() => {
+    const cartItem = cart.find( ci => ci.id === item.id);
+    if(cartItem){
+      setInitialValue(cartItem.quantity);
+    }
+  },  [cart, item.id, initValue])
 
   return (
     <div className="item-description">
@@ -61,12 +79,12 @@ function ItemDetail({item, onAdd}) {
           {`Quantity: ${selectedQty} units`} 
          </Typography>
           
-          <Button size="large" color='success'  href="/cart" >End Order</Button>
+          <Button size="large" color='success'  onClick={() => handleEndOrder() }>End Order</Button>
           </>
           
         ):
         (
-         <ItemCount itemId={item.id} stock={item.stock} initial={0} onAdd={handleOnAdd} />
+         <ItemCount itemId={item.id} stock={item.stock} initial={initValue} onAdd={handleOnAdd} />
         )
         }
        </CardActions>

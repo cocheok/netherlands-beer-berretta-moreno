@@ -53,7 +53,7 @@ export const products = [
       description: 'Amstel Amber beer 12u pack',
       pictureUrl: '/images/products/amstel-pack.jpg',
       stock: 15,
-      price: 1.75,
+      price: 18,
       category_id: 3
     }
   ];
