@@ -14,7 +14,7 @@ function ItemDetailContainer({itemId}) {
   const onAdd = (count) => {
     let newItemsState = {...item} 
     if(newItemsState.stock >= count){
-      newItemsState.stock -= count
+      newItemsState.quantity = count
     }
     return setItem(newItemsState)
   }

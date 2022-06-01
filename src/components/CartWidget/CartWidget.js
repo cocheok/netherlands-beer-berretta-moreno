@@ -1,14 +1,12 @@
 import React from 'react'
 import Badge from '@mui/material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { CartContext } from "../../context/CartContext/CartContext";
 
-function CartWidget() {
+function CartWidget({badgeContent}) {
 
-  const { cart } = React.useContext(CartContext);
 
   return (
-    <Badge badgeContent={cart.length} color="primary">
+    <Badge badgeContent={badgeContent} color="primary">
         <ShoppingCartIcon fontSize="large" color="action" />
     </Badge>
     

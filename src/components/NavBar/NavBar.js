@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import {Link} from 'react-router-dom';
 import { Divider } from '@mui/material';
+import { CartContext } from "../../context/CartContext/CartContext";
 
 export default function Header({sections}) {
   const [state, setState] = React.useState({
@@ -58,6 +59,9 @@ export default function Header({sections}) {
     </Box>
   );
   
+
+  const { cart } = React.useContext(CartContext);
+
     return (
    
         <AppBar position="static">
@@ -85,9 +89,9 @@ export default function Header({sections}) {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Netherlands Beer
             </Typography>
-            <IconButton color="primary" aria-label="Open Cart" href="/cart">
-              <CartWidget /> 
-            </IconButton>
+            {cart.reduce((a, {quantity}) => a + quantity, 0) > 0 ? (<IconButton color="primary" aria-label="Open Cart" href="/cart">
+              <CartWidget badgeContent={cart.reduce((a, {quantity}) => a + quantity, 0)} /> 
+            </IconButton>):<></>}
           </Toolbar>
       </AppBar>
         
