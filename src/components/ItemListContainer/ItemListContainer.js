@@ -1,31 +1,46 @@
 import React, { useState } from 'react'
 import ItemList from '../ItemList/ItemList';
 import CircularProgress from '@mui/material/CircularProgress';
-import { products } from '../../data/products';
+// import { products } from '../../data/products';
 import Button from '@mui/material/Button';
+import { getDocs, query, where, collection, getFirestore} from 'firebase/firestore'
 
 function ItemListContainer({categoryId}) {
   const [error, setError] = useState();
 
-  const [itemsSection, setItemsSection] = useState(<CircularProgress size={90} color={"primary"}/>)
+  const [itemsSection, setItemsSection] = useState()
+  const [loaded, setLoaded] = useState(false);
+
   React.useEffect(() => {
-    
-    setItemsSection(<CircularProgress size={90} color={"primary"}/>);
+    setLoaded(false)
     new Promise((resolve, reject) => 
-      setTimeout(() => { 
+      {
+        const db = getFirestore();
         if(categoryId){
-          const filteredProducts = products.filter(item => item.category_id === +categoryId);
-          if(!filteredProducts || !filteredProducts?.length){
-            //Route to /category/
-            reject(`There are no products in the category ${categoryId}`)
-          } else {
-            resolve(filteredProducts);
-          }
+          const itemsFromCategory = query ( 
+            collection( db, 'products'),
+            where("category_id", '==', categoryId));
+            getDocs(itemsFromCategory).then((snapshot) =>{
+              if(snapshot.size === 0) {
+                reject(`There are no products in the category ${categoryId}`)
+              }
+              resolve(snapshot.docs.map((doc) => ({id: doc.id, ...doc.data() })));
+            })
+          
         } else {
-          resolve(products);
+
+          const productsCollection = collection( db, 'products');
+          getDocs(productsCollection).then((snapshot) =>{
+            if(snapshot.size === 0) {
+              reject('There are no products')
+            }
+            resolve(snapshot.docs.map((doc) => ({id: doc.id,  ...doc.data()})));     
+          })
+          
         }
          
-      }, 2000) ).catch( err => {
+      }).catch( err => {
+        console.log(`ItemListContainer: ${JSON.stringify(err)}`)
         const errorMessage = typeof err === 'string' ? err : 'There was an issue processing your request'; 
         // Go to the main page and display error message
         setError(errorMessage);
@@ -43,15 +58,14 @@ function ItemListContainer({categoryId}) {
           <Button variant="contained" size='large' href="/">Go Home</Button>
           </div>)
         }
-      });
-  }, [categoryId, error]); 
-
+      }).finally( () => {setLoaded(true)});
+  }, [categoryId]); 
   
 
-
   return (
+    
     <div className="item-list-container">
-      { itemsSection }    
+      {loaded ? itemsSection : <CircularProgress size={90} color={"primary"}/> }
     </div>
   )
 }

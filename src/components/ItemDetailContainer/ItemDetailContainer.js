@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import ItemDetail from '../ItemDetail/ItemDetail';
 
 import CircularProgress from '@mui/material/CircularProgress';
-import { productDetails } from '../../data/products';
 import Button from '@mui/material/Button';
+import { getDoc, doc, getFirestore} from 'firebase/firestore'
 
 function ItemDetailContainer({itemId}) {
   
@@ -20,33 +20,33 @@ function ItemDetailContainer({itemId}) {
   }
   
   React.useEffect(() => {
-    new Promise((resolve, reject) => 
-    setTimeout(() => { 
-      
+    new Promise((resolve, reject) => {
       if(itemId){
-        const filteredProducts = productDetails.filter(item => item.id === +itemId);
-        
-        if(!filteredProducts.length){
-          reject(`There are no products with id ${itemId}`)
-        } else {
-          setItem(filteredProducts[0]);
-        }
+        const db = getFirestore();
+        const docRef = doc(db, 'products', itemId);
+        getDoc(docRef).then((docSnap) => {
+          if(docSnap.exists()) {
+            const itemResult = {id: docSnap.id, ...docSnap.data() };
+            resolve(itemResult)
+          }
+          reject(`There is no product with id ${itemId}`)
+        })
       }
-      else{
+      else {
         reject(`There is no product selected to display`);
         // display all products
         // setItems(products);
-      }
-      setLoaded(true);
-      resolve(productDetails)
+      }      
        
-    }, 2000) ).catch( err => {
+    }).then( itemRes => { 
+      setItem(itemRes)    
+    }).catch( err => {
+      console.log(`ItemDetailContainer: ${JSON.stringify(err)}`)
       const errorMessage = typeof err === 'string' ? err : 'There was an issue processing your request'; 
       // Go to the main page and display error message
-      setLoaded(true);
       setError(errorMessage)
       //navigate(`/home?error=${errorMessage}`, { replace: true });
-    });
+    }).finally( () => {setLoaded(true)});
   }, [itemId]);
 
   let itemDetail; 
