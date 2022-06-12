@@ -14,17 +14,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add'
 import RemoveIcon from '@mui/icons-material/Remove';
 
-const TAX_RATE = 0.07;
-
-
-function subtotal(items) {
+function total(items) {
   return items.map(({ price, quantity }) => price*quantity).reduce((sum, i) => sum + i, 0);
 }
 
-export default function Ticket({cart, addItem, removeItem}) {
+export default function Ticket({cart, addItem, removeItem, editable}) {
 
-  const cartSubtotal = subtotal(cart).toFixed(2);
-  const invoiceTaxes = (TAX_RATE * cartSubtotal).toFixed(2);
+  const cartTotal = total(cart).toFixed(2);
 
   const handleModify = (item, action) => {
     if(action === 'add'){
@@ -47,13 +43,12 @@ export default function Ticket({cart, addItem, removeItem}) {
       <TableContainer component={Paper}>
         <Table aria-label="spanning table">
           <TableHead>
-            <TableRow>
+            <TableRow sx={{alignItems:'center'}}>
               <TableCell>#Id</TableCell>
               <TableCell>Title</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Sum</TableCell>
-              <TableCell>Quantity</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -64,18 +59,17 @@ export default function Ticket({cart, addItem, removeItem}) {
                 <TableCell>{cartItem.title}</TableCell>
                 <TableCell>{cartItem.description}</TableCell>
                 <TableCell>{`€${cartItem.price}`}</TableCell>
-                <TableCell>{Math.round(cartItem.price*cartItem.quantity * 100)/100}</TableCell>
+                <TableCell>{`€${Math.round(cartItem.price*cartItem.quantity * 100)/100}`}</TableCell>
+                
                 <TableCell>
-                  <IconButton onClick={() => handleModify(cartItem, 'remove')} aria-label="remove item">
+                  <IconButton disabled={!editable} onClick={() => handleModify(cartItem, 'remove')} aria-label="remove item">
                     <RemoveIcon />
                   </IconButton>
                   {cartItem.quantity}
-                  <IconButton onClick={() => handleModify(cartItem, 'add')} aria-label="add item">
+                  <IconButton disabled={!editable} onClick={() => handleModify(cartItem, 'add')} aria-label="add item">
                     <AddIcon />
                   </IconButton>
-                </TableCell>
-                <TableCell>
-                  <IconButton onClick={() => removeItem(cartItem.id)} aria-label="remove category">
+                  <IconButton disabled={!editable} onClick={() => removeItem(cartItem.id)} aria-label="remove category">
                     <DeleteIcon />
                   </IconButton>
                 </TableCell>
@@ -89,15 +83,9 @@ export default function Ticket({cart, addItem, removeItem}) {
 
     <List>
         <ListItem disableGutters>
-          <ListItemText primary={`Subtotal: €${cartSubtotal}`} />
+          <ListItemText primary={`Total: €${cartTotal}`} />
         </ListItem>
-        <ListItem disableGutters>
-          <ListItemText primary= {`TAX (${(TAX_RATE * 100).toFixed(0)}%): ${invoiceTaxes}`}  />
-        </ListItem>
-        <ListItem disableGutters>
-          <ListItemText primary={`Total: €${Math.round((Number(cartSubtotal) + Number(invoiceTaxes))* 100)/100 }`} />
-        </ListItem>
-    
+        
     </List>
 
 

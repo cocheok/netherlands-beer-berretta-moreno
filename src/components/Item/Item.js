@@ -11,7 +11,6 @@ import Button from '@mui/material/Button';
 function Item({item}) {
 
   return (
-    <>
       <Card >
           <CardHeader  sx={{bgcolor: grey[200]}}
           title={item.title}
@@ -38,10 +37,7 @@ function Item({item}) {
           </Typography>
           
         </CardContent>
-      </Card>
-
-    </>
-    
+      </Card>    
   )
 }
 

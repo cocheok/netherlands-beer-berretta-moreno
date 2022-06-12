@@ -78,20 +78,71 @@
   align-content: center
 
 .cart
-  .actions
-      display: flex
-      flex-direction: row
-      flex-wrap: wrap
-      justify-content: center
-      align-content: center
-  .content
+  .order-container
+    display: flex
+    flex-direction: column
+    flex-wrap: wrap
+    justify-content: center
+    align-content: center
+    .order
       display: flex
       flex-direction: column
       flex-wrap: wrap
       justify-content: center
       align-content: center
-      .ticket
+      .content
         display: flex
         flex-direction: column
+        flex-wrap: wrap
         justify-content: center
         align-content: center
+        gap: 5vh
+      .actions
+        display: flex
+        flex-direction: row
+        flex-wrap: nowrap
+        justify-content: center
+        align-content: center
+        gap: 5vw
+
+  .error
+    .actions
+        display: flex
+        flex-direction: row
+        flex-wrap: wrap
+        justify-content: center
+        align-content: center
+    
+    .content
+        display: flex
+        flex-direction: column
+        flex-wrap: wrap
+        justify-content: center
+        align-content: center
+  
+.ticket
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-content: center
+
+.buyer
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-content: center
+  gap: 5vh
+
+.order-summary
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-content: center
+  text-align: center
+  .buyer-summary
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-content: center
+    text-align: left
+ 
