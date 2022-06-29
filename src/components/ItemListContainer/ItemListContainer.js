@@ -4,12 +4,25 @@ import CircularProgress from '@mui/material/CircularProgress';
 // import { products } from '../../data/products';
 import Button from '@mui/material/Button';
 import { getDocs, query, where, collection, getFirestore} from 'firebase/firestore'
+import { getStorage, ref, getDownloadURL} from 'firebase/storage'
+
+import {Link} from 'react-router-dom';
 
 function ItemListContainer({categoryId}) {
   const [error, setError] = useState();
 
   const [itemsSection, setItemsSection] = useState()
   const [loaded, setLoaded] = useState(false);
+
+  const getPictureUrl = async (name) => {
+    const storage = getStorage();
+    const reference = ref(storage, name);
+    return await getDownloadURL(reference).then( res => { 
+      console.log(`res: ${res}`);
+      return res; 
+    }).catch(err => console.log(`My error: ${JSON.stringify(err)}`));
+
+  }
 
   React.useEffect(() => {
     setLoaded(false)
@@ -24,7 +37,12 @@ function ItemListContainer({categoryId}) {
               if(snapshot.size === 0) {
                 reject(`There are no products in the category ${categoryId}`)
               }
-              resolve(snapshot.docs.map((doc) => ({id: doc.id, ...doc.data() })));
+              const myPromisesResult = snapshot.docs.map( async (doc) => {
+                const pictureUrl = await getPictureUrl(doc.data().pictureUrl);
+                return {id: doc.id,  ...doc.data(), pictureUrl }
+              })
+              const result = Promise.all(myPromisesResult);
+              resolve(result);
             })
           
         } else {
@@ -34,7 +52,13 @@ function ItemListContainer({categoryId}) {
             if(snapshot.size === 0) {
               reject('There are no products')
             }
-            resolve(snapshot.docs.map((doc) => ({id: doc.id,  ...doc.data()})));     
+            const myPromisesResult = snapshot.docs.map( async (doc) => {
+              const pictureUrl = await getPictureUrl(doc.data().pictureUrl);
+              return {id: doc.id,  ...doc.data(), pictureUrl }
+            })
+            const result = Promise.all(myPromisesResult);
+            console.log(`result: ${JSON.stringify(result)}`)
+            resolve(result);     
           })
           
         }
@@ -47,15 +71,15 @@ function ItemListContainer({categoryId}) {
         setItemsSection(<div className="no-items">
           <h1>There are no items to display</h1>
           <h2>{`Error: ${error}`}</h2>
-          <Button variant="contained" size='large' href="/">Go Home</Button>
+          <Button variant="contained" size='large' component={Link} to="/">Go Home</Button>
           </div>)
       }).then( (filteredProductsObtained) => {
-        if(filteredProductsObtained.length > 0){
+        if(filteredProductsObtained && filteredProductsObtained.length > 0){
           setItemsSection(<ItemList items={filteredProductsObtained} />)
         } else {
           setItemsSection(<div className="no-items">
           <h1>There are no items to display</h1>
-          <Button variant="contained" size='large' href="/">Go Home</Button>
+          <Button variant="contained" size='large' component={Link} to="/">Go Home</Button>
           </div>)
         }
       }).finally( () => {setLoaded(true)});

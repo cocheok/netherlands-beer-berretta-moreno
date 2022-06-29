@@ -4,6 +4,8 @@ import ItemDetail from '../ItemDetail/ItemDetail';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import { getDoc, doc, getFirestore} from 'firebase/firestore'
+import {Link} from 'react-router-dom';
+import { getStorage, ref, getDownloadURL} from 'firebase/storage'
 
 function ItemDetailContainer({itemId}) {
   
@@ -18,6 +20,15 @@ function ItemDetailContainer({itemId}) {
     }
     return setItem(newItemsState)
   }
+
+  const getPictureUrl = async (name) => {
+    const storage = getStorage();
+    const reference = ref(storage, name);
+    return await getDownloadURL(reference).then( res => { 
+      return res; 
+    }).catch(err => console.log(`My error: ${JSON.stringify(err)}`));
+
+  }
   
   React.useEffect(() => {
     new Promise((resolve, reject) => {
@@ -26,10 +37,17 @@ function ItemDetailContainer({itemId}) {
         const docRef = doc(db, 'products', itemId);
         getDoc(docRef).then((docSnap) => {
           if(docSnap.exists()) {
-            const itemResult = {id: docSnap.id, ...docSnap.data() };
-            resolve(itemResult)
+            getPictureUrl(docSnap.data().pictureUrl).then(
+              pictureUrl => {
+                const itemResult = {id: docSnap.id, ...docSnap.data(), pictureUrl  };
+                resolve(itemResult);
+              }
+            );
+            
+          } else {
+            reject(`There is no product with id ${itemId}`);
           }
-          reject(`There is no product with id ${itemId}`)
+          
         })
       }
       else {
@@ -57,7 +75,7 @@ function ItemDetailContainer({itemId}) {
       itemDetail = <div className="no-items">
       <h1>There is no item to display</h1>
       <h2>{`Error: ${error}`}</h2>
-      <Button variant="contained" href="/">Go Home</Button>
+      <Button variant="contained" component={Link} to="/">Go Home</Button>
       </div>
     }
   } else { 

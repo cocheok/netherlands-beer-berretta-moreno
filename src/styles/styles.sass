@@ -4,6 +4,7 @@
   display: flex
   flex-direction: column
   flex-wrap: nowrap
+  min-height: 100vh
   .logo
       display: flex
       width: 3%
@@ -12,7 +13,7 @@
       justify-content: center
       img
         width: 100%
-  
+
 .category
   min-height: 100vh
   display: flex
@@ -76,15 +77,31 @@
   flex-wrap: wrap
   justify-content: center
   align-content: center
+.order
+  display: flex
+  flex-direction: column
+  flex-wrap: wrap
+  justify-content: start
+  align-content: center
+  background-color: #708899
+  min-height: 100vh
+
 
 .cart
+  display: flex
+  flex-direction: column
+  flex-wrap: wrap
+  justify-content: center
+  align-content: center
+  background-color: #708899
+  min-height: 100vh
   .order-container
     display: flex
     flex-direction: column
     flex-wrap: wrap
-    justify-content: center
+    justify-content: start
     align-content: center
-    .order
+    .order-checkout
       display: flex
       flex-direction: column
       flex-wrap: wrap
@@ -146,3 +163,26 @@
     align-content: center
     text-align: left
  
+.order-label
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-content: center
+  text-align: center
+  width: 100%
+
+.wishlist
+  background-color: #708899
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  justify-content: center
+  align-content: center
+  gap: 2vh
+  min-height: 100vh
+  .no-items 
+    display: flex
+    flex-direction: column
+    flex-wrap: wrap
+    justify-content: space-around
+    align-content: center

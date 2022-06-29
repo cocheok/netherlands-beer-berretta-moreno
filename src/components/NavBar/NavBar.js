@@ -13,7 +13,7 @@ import Box from '@mui/material/Box';
 import {Link} from 'react-router-dom';
 import { Divider } from '@mui/material';
 import { CartContext } from "../../context/CartContext/CartContext";
-
+import UserMenu from "../UserMenu/UserMenu"
 export default function Header({sections}) {
   const [state, setState] = React.useState({
     top: false,
@@ -82,16 +82,18 @@ export default function Header({sections}) {
             onClose={toggleDrawer('left', false)}
           >
             {list('left')}
-          </Drawer>
+            </Drawer>
             <div className="logo">
-              <img src="/images/logo.png" alt='Netherlands Beer'/>     
+              <img src="/logo.png" alt='Netherlands Beer'/>     
             </div>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Netherlands Beer
             </Typography>
-            {cart.reduce((a, {quantity}) => a + quantity, 0) > 0 ? (<IconButton color="primary" aria-label="Open Cart" href="/cart">
+            {cart.reduce((a, {quantity}) => a + quantity, 0) > 0 ? (<IconButton color="primary" aria-label="Open Cart" component={Link} to="/cart">
               <CartWidget badgeContent={cart.reduce((a, {quantity}) => a + quantity, 0)} /> 
             </IconButton>):<></>}
+            <UserMenu />
+              
           </Toolbar>
       </AppBar>
         

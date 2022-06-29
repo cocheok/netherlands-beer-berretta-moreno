@@ -46,10 +46,16 @@ export default function Ticket({cart, addItem, removeItem, editable}) {
             <TableRow sx={{alignItems:'center'}}>
               <TableCell>#Id</TableCell>
               <TableCell>Title</TableCell>
-              <TableCell>Description</TableCell>
+              <TableCell>Custom</TableCell>
+              {editable?
+                <TableCell>Description</TableCell>
+              :<></>}
               <TableCell>Price</TableCell>
-              <TableCell>Sum</TableCell>
+              
+              {editable? 
               <TableCell>Actions</TableCell>
+              :<TableCell>Quantity</TableCell>}
+              <TableCell>Sum</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -57,23 +63,28 @@ export default function Ticket({cart, addItem, removeItem, editable}) {
               <TableRow key={cartItem.id}>
                 <TableCell>{cartItem.id}</TableCell>
                 <TableCell>{cartItem.title}</TableCell>
-                <TableCell>{cartItem.description}</TableCell>
+                <TableCell>{cartItem.customSelected? Object.keys(cartItem.customSelected).map( (value, index) => (<p key={index}> { `${value}: ${cartItem.customSelected[value]}` } </p>)):<></>} </TableCell>
+                {!editable?
+                <></> 
+              :<TableCell>{cartItem.description}</TableCell>}
                 <TableCell>{`€${cartItem.price}`}</TableCell>
-                <TableCell>{`€${Math.round(cartItem.price*cartItem.quantity * 100)/100}`}</TableCell>
-                
-                <TableCell>
-                  <IconButton disabled={!editable} onClick={() => handleModify(cartItem, 'remove')} aria-label="remove item">
+                {editable? 
+                [<TableCell key='qtyEdit' >{`€${Math.round(cartItem.price*cartItem.quantity * 100)/100}`}</TableCell>,
+                <TableCell key='actions'>
+                  <IconButton onClick={() => handleModify(cartItem, 'remove')} aria-label="remove item">
                     <RemoveIcon />
                   </IconButton>
                   {cartItem.quantity}
-                  <IconButton disabled={!editable} onClick={() => handleModify(cartItem, 'add')} aria-label="add item">
+                  <IconButton onClick={() => handleModify(cartItem, 'add')} aria-label="add item">
                     <AddIcon />
                   </IconButton>
-                  <IconButton disabled={!editable} onClick={() => removeItem(cartItem.id)} aria-label="remove category">
+                  <IconButton onClick={() => removeItem(cartItem.id)} aria-label="remove category">
                     <DeleteIcon />
                   </IconButton>
-                </TableCell>
+                </TableCell>]
+                  : [<TableCell key='qtyNonEdit'>{cartItem.quantity}</TableCell>, <TableCell key='priceNonEdit'>{`€${Math.round(cartItem.price*cartItem.quantity * 100)/100}`}</TableCell>]}
               </TableRow>
+              
             ))}      
           </TableBody>
         </Table>
@@ -82,7 +93,7 @@ export default function Ticket({cart, addItem, removeItem, editable}) {
 
 
     <List>
-        <ListItem disableGutters>
+        <ListItem key='ticketListTotal' disableGutters>
           <ListItemText primary={`Total: €${cartTotal}`} />
         </ListItem>
         

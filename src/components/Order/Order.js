@@ -19,6 +19,7 @@ import {
   runTransaction,
   collection,
   getFirestore,
+  serverTimestamp
 } from "firebase/firestore";
 
 
@@ -65,18 +66,33 @@ export default function Order({cart, addItem, removeItem, clear, buyerFormValues
   },  [buyerFormValues, cart, addItem, removeItem, clear, setBuyerFormValues])
 
   const checkBuyerInformation = () => {
-    return (buyerFormValues && buyerFormValues.name && buyerFormValues.email && buyerFormValues.phone)
+    let errors = [];
+    if(buyerFormValues){
+      if(!buyerFormValues.email){
+        errors.push('email') 
+      }
+      if(!buyerFormValues.name){
+        errors.push('name') 
+      }
+      if(!buyerFormValues.phone){
+        errors.push('phone') 
+      }
+    } 
+    return errors;
   }
 
   const handleNext = () => {
-    if( steps[activeStep].id===2 && !checkBuyerInformation()){
-      setMessage(`Buyer information: You must fill in all the fields`, 'error')
+    let errors = checkBuyerInformation();
+    if( steps[activeStep].id===2 && errors.length > 0){
+      if(errors.length === 1){
+        setMessage(`You must fill in the ${errors[0]} field`, 'error')  
+      } else {
+        setMessage(`You must fill in the fields: ${errors.join(' ')}`, 'error')
+      }
     } else {
       setMessage('','')
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
-    
-    
   };
 
   const handleBack = () => {
@@ -102,13 +118,22 @@ export default function Order({cart, addItem, removeItem, clear, buyerFormValues
   const handleSubmit = async(event) => { 
     setSubmitting(true)
     event.preventDefault();
-    const order = {
-      buyer: buyerFormValues,
-      items: cart.map( (item) => { return {id: item.id, title: item.title, price: item.price} }),
-      total: cart.map(({ price, quantity }) => price*quantity).reduce((sum, i) => sum + i, 0),
-    };
+    let cartItems = []; 
+    cart.forEach( (item) => { 
+      for(let i = 0; i < item.quantity; i++) {
+        cartItems.push({id: item.id, title: item.title, price: item.price, customSelected: item.customSelected})
+      }
+    })
     const db = getFirestore()
     const ordersCollection = collection(db, "orders")
+
+    const order = {
+      buyer: buyerFormValues,
+      items: cartItems,
+      total: cart.map(({ price, quantity }) => price*quantity).reduce((sum, i) => sum + i, 0),
+      status: 'GENERATED',
+      date: serverTimestamp()
+    };
     await addDoc(ordersCollection, order).then(({id}) => {
       updateProducts()
       setMessage(`Order created with id ${id}`, 'success')  
@@ -120,7 +145,7 @@ export default function Order({cart, addItem, removeItem, clear, buyerFormValues
   return (
     <div className="order-container"> 
     {submitting? (<CircularProgress size={90} color={"primary"}/>):
-    (<Card className="order">
+    (<Card className="order-checkout">
        <CardHeader sx={{textAlign: "center"}}
         title="My Cart" 
         className='header'/>

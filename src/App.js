@@ -3,7 +3,7 @@ import Header from './components/NavBar/NavBar';
 import Home from './views/Home/Home';
 import Cart from './views/Cart/Cart';
 import { CartProvider } from './context/CartContext/CartContext'
-
+import { UserProvider } from './context/UserContext/UserContext'
 import {
   BrowserRouter,
   Routes,
@@ -12,6 +12,9 @@ import {
 import Category from './views/Category/Category';
 import Item from './views/Item/Item';
 import { getDocs, collection, getFirestore} from 'firebase/firestore'
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import WishList from './views/WishList/WishList';
+import Orders from './views/Orders/Orders';
 
 function App() {
   const [sections, setSections] = useState([]);
@@ -47,17 +50,24 @@ function App() {
     <div className="app">  
       
         <BrowserRouter>
-          <CartProvider>
-            <Header sections={sections} />
-            <div className="body">
-                <Routes>
-                  <Route exact path="/item/:id" element={<Item />} />
-                  <Route exact path="/category/:categoryId" element={<Category />} />
-                  <Route exact path="/cart" element={<Cart />} />
-                  <Route exact path="*" element={<Home />} />
-                </Routes>
-              </div>
-          </CartProvider>
+          <GoogleOAuthProvider clientId="105860715541-ru7plhctmdr28nb3c6ps2oj72qdf652o.apps.googleusercontent.com">
+            <UserProvider>
+              <CartProvider>
+                <Header sections={sections} />
+                <div className="body">
+                    <Routes>
+                      <Route exact path="/item/:id" element={<Item />} />
+                      <Route exact path="/category/:categoryId" element={<Category />} />
+                      <Route exact path="/cart" element={<Cart />} />
+                      <Route exact path="/order" element={<Orders />} />
+                      <Route exact path="/wishlist" element={<WishList />} />
+                      <Route exact path="*" element={<Home />} />
+                    </Routes>
+                  </div>
+              </CartProvider>
+            </UserProvider>
+
+            </GoogleOAuthProvider>
         </BrowserRouter>
         </div>  
   );

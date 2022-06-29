@@ -6,12 +6,36 @@ José Manuel Berretta Moreno
 
 Ecommerce to sell beers from the Netherlands
 
+### Main Flows
 
+#### Add products to the cart and order
+![Add products to the cart and order](main-flow.gif)
+
+#### See user orders
+![Orders](orders.gif)
+
+#### Add/Remove from wishlist
+![Wishlist](wishlist.gif)
+
+#### Login / Logout
+![Login / Logout](login-logout.gif)
 ## Components
-
 ![Diagram](coder.png)
 
+
+## Libraries and technologies used
+* [React](https://reactjs.org/): JavaScript library for building user interfaces
+* [Material UI](https://mui.com/material-ui/getting-started/usage/): Library to get all the visual components
+* [FlexBox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/): css technique to make the layouts
+* [Sass](https://www.npmjs.com/package/sass): CSS extension language
+* [react-router-dom](https://www.npmjs.com/package/react-router-dom): Used for implementing the routing in react
+* [Firebase](https://firebase.google.com/docs/libraries): To communicate with the Firebase serverless resources.
+* [@react-oauth/google](https://www.npmjs.com/package/@react-oauth/google): Login with Google 
 ## Configuration
+
+## Environment variables
+REACT_APP_FIREBASE_APIKEY: apiKey from firebase
+
 ### Available Scripts
 
 In the project directory, you can run:

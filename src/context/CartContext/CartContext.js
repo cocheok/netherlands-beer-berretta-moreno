@@ -20,9 +20,10 @@ const CartProvider = ({children}) => {
       //Modify order
       const newCart = cart.map(cartItem => {
         if(cartItem.id === item.id) {
-            cartItem.quantity=count
+            cartItem.quantity = count;
+            cartItem.customSelected = item.customSelected;
         }
-        return cartItem
+        return cartItem;
       })
       setCart(newCart)
     }
@@ -30,7 +31,6 @@ const CartProvider = ({children}) => {
       //Add to cart if not exist
       setCart([...cart, {...item, quantity: +count}])
     }
-    
   }
 
   const removeItem = (id) => {

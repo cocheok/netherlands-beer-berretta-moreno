@@ -1,9 +1,9 @@
 import React from 'react'
 import Item from '../Item/Item'
-function ItemList({items, onAdd}) {
+function ItemList({items}) {
   return (
     <>
-      { items.map( (item, index) => <Item key={index} index={index} item={item} onAdd={onAdd} /> )}
+      { items.map( (item, index) => <Item key={index} item={item} /> )}
     </>    
   )
 }
